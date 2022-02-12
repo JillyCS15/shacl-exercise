@@ -1,0 +1,46 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:User a sh:NodeShape, rdfs:Class ;
+    sh:property [
+        sh:path schema:givenName ;
+        sh:equals foaf:firstName
+    ];
+    sh:property [
+        sh:path schema:givenName ;
+        sh:disjoint schema:lastName
+    ] .
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:alice a :User ;
+    schema:givenName "Alice";
+    schema:lastName "Cooper";
+    foaf:firstName "Alice" .
+
+:bob a :User ;
+    schema:givenName "Bob";
+    schema:lastName "Smith" ;
+    foaf:firstName "Robert" .
+
+:carol a :User ;
+    schema:givenName "Carol";
+    schema:lastName "Carol" ;
+    foaf:firstName "Carol" .

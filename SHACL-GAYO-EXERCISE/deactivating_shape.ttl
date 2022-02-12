@@ -1,0 +1,46 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:UserShape a sh:NodeShape;
+    sh:targetClass :User ;
+    sh:property :HasName ;
+    sh:property :HasEmail .
+
+:HasName sh:path schema:name ;
+    sh:datatype xsd:string .
+
+:HasEmail sh:path schema:email ;
+    sh:minCount 1;
+    sh:nodeKind sh:IRI .
+
+:TeacherShape a sh:NodeShape;
+    sh:targetClass :Teacher ;
+    sh:node :UserShape ;
+    sh:property [ sh:path :teaches ;
+        sh:minCount 1;
+        sh:datatype xsd:string;
+    ] .
+
+:HasEmail sh:deactivated true .
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:bob a :User, :Teacher ;
+    schema:name "Bob" ;
+    :teaches "Semantic Web" .

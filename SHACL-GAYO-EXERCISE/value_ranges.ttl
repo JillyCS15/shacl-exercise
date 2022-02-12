@@ -1,0 +1,37 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Rating a sh:NodeShape, rdfs:Class ;
+    sh:property [
+        sh:path schema:ratingValue ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 5 ;
+        sh:datatype xsd:integer
+    ] .
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:bad a :Rating ;
+    schema:ratingValue 1 .
+:average a :Rating ;
+    schema:ratingValue 3 .
+:veryGood a :Rating ;
+    schema:ratingValue 5 .
+:zero a :Rating ;
+    schema:ratingValue 0 .

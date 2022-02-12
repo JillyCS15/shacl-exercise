@@ -1,0 +1,35 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:User a sh:NodeShape, rdfs:Class ;
+    sh:property [
+        sh:path [sh:inversePath schema:follows ];
+        sh:nodeKind sh:IRI ;
+    ] .
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:alice a :User;
+    schema:follows :bob .
+
+:bob a :User .
+
+:carol a :User;
+    schema:follows :alice .
+
+_:1 schema:follows :bob .

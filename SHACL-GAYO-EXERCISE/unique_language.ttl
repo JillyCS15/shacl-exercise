@@ -1,0 +1,39 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:CountryShape a sh:NodeShape ;
+    sh:targetClass :Country ;
+    sh:property [
+        sh:path skos:prefLabel ;
+        sh:uniqueLang true
+    ] .
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:spain a :Country;
+    skos:prefLabel "Spain"@en, "España"@es .
+
+:france a :Country;
+    skos:prefLabel "France", "France"@en, "Francia"@es .
+
+:italy a :Country .
+
+:usa a :Country;
+    skos:prefLabel "USA"@en, "United States"@en.
