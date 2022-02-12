@@ -1,0 +1,62 @@
+# Shapes Graph
+Shapes Graph
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix ex: <http://example.com/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:AnnotationExample
+	a sh:NodeShape ;
+	sh:targetClass ex:Person ;
+	sh:sparql [   # _:b1
+		sh:resultAnnotation [
+			sh:annotationProperty ex:time ;
+			sh:annotationVarName "time" ;
+		] ;
+		sh:select """
+			SELECT $this ?message ?time
+			WHERE {
+				BIND (CONCAT("The ", "message.") AS ?message) .
+				BIND (NOW() AS ?time) .
+			}
+			""" ;
+	] .
+
+
+# Data Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:alice a ex:Person ;
+    ex:bornIn ex:USA ;
+    schema:familyName "Cooper" ;
+    schema:name "Alice Cooper" .
+ex:bob a ex:Person ;
+    ex:bornIn ex:USA ;
+    schema:givenName "Bob" ;
+    schema:familyName "Bob" ;
+    schema:name "Robert Smith" .
+ex:jilham a ex:Person ;
+    ex:bornIn ex:Indonesia ;
+    schema:givenName "Jilham" ;
+    schema:name "Jilham Luthfi" .
+ex:ahmad a ex:Person ;
+    ex:bornIn ex:Indonesia ;
+    schema:name "Ahmad" .
+ex:USA a ex:Country ;
+    rdfs:label "United States" .
+ex:Indonesia a ex:Country ;
+    rdfs:label "Indonesia".

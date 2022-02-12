@@ -1,0 +1,67 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:multiply
+  a sh:SPARQLFunction ;
+	rdfs:comment "Multiplies its two arguments $op1 and $op2." ;
+	sh:parameter [
+		sh:path ex:op1 ;
+		sh:datatype xsd:integer ;
+		sh:description "The first operand" ;
+	] ;
+	sh:parameter [
+		sh:path ex:op2 ;
+		sh:datatype xsd:integer ;
+		sh:description "The second operand" ;
+	] ;
+	sh:returnType xsd:integer ;
+	sh:select """
+		SELECT ($op1 * $op2 AS ?result)
+		WHERE {
+		}
+		""" .
+
+ex:RectangleRulesShape
+	a sh:NodeShape ;
+	sh:targetClass ex:Rectangle ;
+	sh:rule [
+		a sh:TripleRule ;
+		sh:subject sh:this ;
+		sh:predicate ex:area ;
+		sh:object [
+			ex:multiply ( [ sh:path ex:width ] [ sh:path ex:height ] ) ;
+		] ;
+		sh:condition ex:RectangleShape ;
+	] .
+
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:InvalidRectangle
+	a ex:Rectangle .
+
+ex:NonSquareRectangle
+	a ex:Rectangle ;
+	ex:height 2 ;
+	ex:width 3 .
+
+ex:SquareRectangle
+	a ex:Rectangle ;
+	ex:height 4 ;
+	ex:width 4 .

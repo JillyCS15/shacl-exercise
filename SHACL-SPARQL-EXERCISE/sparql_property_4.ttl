@@ -1,0 +1,102 @@
+# Shapes Graph
+Shapes Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:
+    a owl:Ontology ;
+    owl:imports sh: ;
+    sh:declare [
+		sh:prefix "ex" ;
+		sh:namespace "http://example.org/ns#"^^xsd:anyURI ;
+	] ;
+    sh:declare [
+		sh:prefix "xsd" ;
+		sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ;
+	] .
+
+ex:multiply
+	a sh:SPARQLFunction ;
+	rdfs:comment "Multiplies its two arguments $op1 and $op2." ;
+	sh:parameter [
+		sh:path ex:op1 ;
+		sh:datatype xsd:integer ;
+		sh:description "The first operand" ;
+	] ;
+	sh:parameter [
+		sh:path ex:op2 ;
+		sh:datatype xsd:integer ;
+		sh:description "The second operand" ;
+	] ;
+	sh:returnType xsd:integer ;
+	sh:select """
+		SELECT ($op1 * $op2 AS ?result)
+		WHERE {
+		}
+		""" .
+
+ex:RectanglePropertyShape
+    a sh:NodeShape ;
+    sh:targetClass ex:Rectangle ;
+    sh:property [
+        sh:path ex:height ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ex:width ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+sh:RectangleAreaShape
+    a sh:NodeShape ;
+    sh:targetClass ex:Rectangle ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "The area of {$this} is no more than 50. The actual area is {?area}" ;
+        sh:prefixes ex: ;
+        sh:select """
+            PREFIX ex: <http://example.org/ns#>
+            SELECT $this ?area
+            WHERE {
+                $this ex:height ?height ;
+                    ex:width ?width ;
+                BIND (ex:multiply (?height, ?width) AS ?area)
+                FILTER (!(datatype(?height) = xsd:integer) || !(datatype(?width) = xsd:integer) || ?area <= 50)
+            }
+        """ ;
+        sh:condition ex:RectanglePropertyShape ;
+    ] .
+
+
+# Data Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:InvalidRectangle
+	a ex:Rectangle .
+
+ex:NonSquareRectangle
+	a ex:Rectangle ;
+	ex:height 2 ;
+	ex:width 3 .
+
+ex:SquareRectangle
+	a ex:Rectangle ;
+	ex:height 4 ;
+	ex:width 4 .

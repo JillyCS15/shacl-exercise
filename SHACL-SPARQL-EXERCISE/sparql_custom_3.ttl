@@ -1,0 +1,61 @@
+# Shapes Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:LanguageConstraintComponentUsingASK
+	a sh:ConstraintComponent ;
+	rdfs:label "Language constraint component" ;
+	sh:parameter [
+		sh:path ex:lang ;
+		sh:datatype xsd:string ;
+		sh:minLength 2 ;
+		sh:name "language" ;
+		sh:description "The language tag, e.g. \"de\"." ;
+	] ;
+	sh:labelTemplate "Values are literals with language \"{$lang}\"" ;
+	sh:validator ex:hasLang .
+
+ex:hasLang
+	a sh:SPARQLAskValidator ;
+	sh:message "Values are literals with language \"{$lang}\"" ;
+	sh:ask """
+		ASK {
+			FILTER (isLiteral($value) && langMatches(lang($value), $lang))
+		}
+		""" .
+
+ex:LanguageExampleShape
+	a sh:NodeShape ;
+	sh:targetClass ex:Country ;
+	sh:property [
+		sh:path ex:germanLabel ;
+		ex:lang "de" ;
+	] ;
+	sh:property [
+		sh:path ex:englishLabel ;
+		ex:lang "en" ;
+	] .
+
+
+# Data Graph
+@prefix : <http://example.org/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:ValidCountry a ex:Country ;
+	ex:germanLabel "Spanien"@de .
+
+ex:InvalidCountry a ex:Country ;
+	ex:germanLabel "Spain"@en .

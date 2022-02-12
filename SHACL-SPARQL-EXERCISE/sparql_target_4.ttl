@@ -1,0 +1,87 @@
+# Shapes Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:
+    a owl:Ontology ;
+    owl:imports sh: ;
+    sh:declare [
+		sh:prefix "ex" ;
+		sh:namespace "http://example.org/ns#"^^xsd:anyURI ;
+	] .
+
+
+ex:PeopleBornInCountryTarget
+	a sh:SPARQLTargetType ;
+	rdfs:subClassOf sh:Target ;
+	sh:labelTemplate "All persons born in {$country}" ;
+	sh:parameter [
+		sh:path ex:country ;
+		sh:description "The country that the focus nodes are 'born' in." ;
+		sh:class ex:Country ;
+		sh:nodeKind sh:IRI ;
+	] ;
+	sh:prefixes ex: ;
+	sh:select """
+        PREFIX ex: <http://example.org/ns#>
+		SELECT ?this
+		WHERE {
+			?this a ex:Person ;
+                ex:bornIn $country .
+		}
+		""" .
+
+ex:USCitizenShape
+    a sh:NodeShape ;
+    sh:target [
+        a ex:PeopleBornInCountryTarget ;
+        ex:country ex:USA ;
+    ] ;
+    sh:property [
+        sh:path schema:givenName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:familyName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+
+# Data Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:alice a ex:Person ;
+    ex:bornIn ex:USA ;
+    schema:givenName "Alice" ;
+    schema:name "Alice Cooper" .
+ex:bob a ex:Person ;
+    ex:bornIn ex:USA ;
+    schema:givenName "Bob" ;
+    schema:familyName "Bob" ;
+    schema:name "Robert Smith" .
+ex:soeharto a ex:Person ;
+    ex:bornIn ex:Indonesia ;
+    schema:givenName "Soeharto" ;
+    schema:name "Soeharto" .
+ex:ahmad a ex:Person ;
+    ex:bornIn ex:Indonesia ;
+    schema:name "Ahmad" .
+ex:USA a ex:Country .
+ex:Indonesia a ex:Country .

@@ -1,0 +1,78 @@
+# Shapes Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+plm:
+    a owl:Ontology ;
+    owl:imports sh: ;
+    sh:declare [
+        sh:prefix "plm" ;
+        sh:namespace "http://example.com/def/plm/"^^xsd:anyURI ;
+    ] .
+
+:shape1 a sh:NodeShape ;
+    sh:targetSubjectsOf plm:containsMaterialClass ;
+    sh:property [
+        sh:path ( plm:qualifiedRelation plm:massPercentage ) ;
+        sh:severity sh:Warning ;
+        sh:sparql [
+            a sh:SPARQLConstraint ;
+            sh:message "Mass percentage of contained material classes should sum to 100%" ;
+            sh:prefixes plm: ;
+            sh:select """
+                SELECT $this (sum(?massPercentage) as ?value) {
+                    $this $PATH ?massPercentage .
+                }
+                GROUP BY $this
+                HAVING (sum(?massPercentage) != 100)
+                """
+        ]
+    ] .
+
+
+# Data Graph
+@prefix : <http://example.org/ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix plm: <http://example.com/def/plm/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<132253533401> a plm:Adhesive ;
+    plm:containsMaterialClass <132285000108>, <132285000179>, <132285000343>, <132285000435> ;
+    plm:name "1322 535 33401" ;
+    plm:qualifiedRelation [
+        a plm:ContainsMaterialClassRelation ;
+        plm:massPercentage 10.0 ;
+        plm:materialGroup "Polymer" ;
+        plm:target <132285000435>
+    ] ;
+    plm:qualifiedRelation [
+        a plm:ContainsMaterialClassRelation ;
+        plm:massPercentage 5.1 ;
+        plm:materialGroup "Polymer" ;
+        plm:target <132285000343>
+    ] ;
+    plm:qualifiedRelation [
+        a plm:ContainsMaterialClassRelation ;
+        plm:massPercentage 84.0 ;
+        plm:materialGroup "Filler" ;
+        plm:target <132285000108>
+    ] ;
+    plm:qualifiedRelation [
+        a plm:ContainsMaterialClassRelation ;
+        plm:massPercentage 1.0 ;
+        plm:materialGroup "Additive" ;
+        plm:target <132285000179>
+    ] .
