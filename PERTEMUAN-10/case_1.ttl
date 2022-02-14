@@ -1,0 +1,125 @@
+# Case: 3 Instances of Person Class
+
+# Data Graph
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+
+
+wd:Q76156 rdfs:label "Bacharuddin Jusuf Habibie"@id ;
+          wdt:P40 wd:Q19726132, wd:Q64623631 .
+
+wd:Q72119052 rdfs:label "Johnny G. Plate"@id ;
+             wdt:P1971 3 .
+
+wd:Q4263230 rdfs:label "Anies Baswedan"@id ;
+            wdt:P40 wd:Q106508453, wd:Q106508455, wd:Q106508446, wd:Q106508451 .
+
+wd:Q19726132 rdfs:label "Ilham Akbar Habibie"@en .
+wd:Q64623631 rdfs:label "Thareq Kemal Habibie"@en .
+wd:Q106508453 rdfs:label "Mutiara Annisa Baswedan"@en .
+wd:Q106508455 rdfs:label "Mikail Azizi Baswedan"@en .
+wd:Q106508446 rdfs:label "Kaisar Hakam Baswedan"@en .
+wd:Q106508451 rdfs:label "Ismail Hakim Baswedan"@en .
+
+# Shapes Graph
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Custom constraint dengan parameter ex:num untuk mengecek jumlah nilai path
+# dari suatu instance/focus node
+ex:childrenConstraintComponent a sh:ConstraintComponent ;
+    sh:parameter [
+        sh:path ex:num ;
+        sh:datatype xsd:integer ;
+        sh:name "Number of Children" ;
+    ] ;
+    sh:labelTemplate "Values are number of children they should have: {$num}" ;
+    sh:propertyValidator [
+        a sh:SPARQLSelectValidator ;
+        sh:message "Values are number of children they should have: {$num}" ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "wdt" ;
+                sh:namespace "http://www.wikidata.org/prop/direct/"^^xsd:anyURI ;
+            ] ;
+        ] ;
+        sh:select """
+            SELECT $this $PATH (COUNT(?child) AS ?count)
+            WHERE {
+                $this $PATH ?child .
+            }
+            GROUP BY $this $PATH
+            HAVING (?count != $num)
+        """
+    	] .
+
+# Custom constraint dengan parameter ex:name untuk mengecek apakah nilai tersebut
+# ada pada suatu instance/focus node
+ex:childrenNameConstraint a sh:ConstraintComponent ;
+    sh:parameter [
+        sh:path ex:name ;
+        sh:name "Name of Children" ;
+        sh:description "The name of children" ;
+    ] ;
+    sh:validator [
+        a sh:SPARQLAskValidator ;
+        sh:message
+            "{$PATH} must have children name {?name}" ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "rdfs" ;
+                sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ;
+            ] ;
+            sh:declare [
+                sh:prefix "wdt" ;
+                sh:namespace "http://www.wikidata.org/prop/direct/"^^xsd:anyURI ;
+            ] ;
+        ] ;
+        sh:ask '''
+            ASK {
+                $this $PATH ?child .
+                ?child rdfs:label ?childname .
+                FILTER (LANG(?childname) = "en" && regex(lcase(?childname), lcase($name)))
+            }
+        '''
+    ] .
+
+
+# Shape untuk mengecek jumlah anak dari instance B. J. Habibie
+ex:HabibieChildrenConstraint a sh:NodeShape ;
+    sh:targetNode wd:Q76156 ;
+    sh:property [
+        sh:path wdt:P40 ;
+        ex:num 2 ;
+        sh:minCount 1 ;
+        ex:name "Ilham Akbar Habibie", "Thareq Kemal Habibie" ;
+    ] .
+
+# Shape untuk mengecek jumlah anak dari instance Johnny G. Plate
+ex:JohnnyChildrenConstraint a sh:NodeShape ;
+    sh:targetNode wd:Q72119052 ;
+    sh:property [
+        sh:path wdt:P40 ;
+        ex:num 3 ;
+        sh:minCount 1 ;
+    ] .
+
+# Shape untuk mengecek jumlah anak dari instance Anies Baswedan
+ex:AniesChildrenConstraint a sh:NodeShape ;
+    sh:targetNode wd:Q4263230 ;
+    sh:property [
+        sh:path wdt:P40 ;
+        ex:num 4 ;
+        sh:minCount 1 ;
+        ex:name "Mutiara Annisa Baswedan", "Mikail Azizi Baswedan",
+                "Kaisar Hakam Baswedan", "Ismail Hakim Baswedan" ;
+    ] .
