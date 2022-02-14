@@ -1,0 +1,60 @@
+# Case: Instances of Gender Class
+
+# DATA GRAPH
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix ex: <http://example.org/ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Male a ex:Gender .
+
+ex:Female a ex:Gender .
+
+ex:Unknown a ex:Gender .
+
+
+# SHAPE GRAPH
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+# Constraint untuk instance class Gender yang harus memiliki tepat
+# dua instance, yakni ex:Male dan ex:Female
+ex:GenderInstanceConstraint a sh:NodeShape ;
+    sh:targetNode ex:Gender ;
+    sh:property [
+        sh:path [ sh:inversePath rdf:type ] ;
+        sh:or (
+            [ sh:hasValue ex:Male ]
+            [ sh:hasValue ex:Female ]
+        ) ;
+    ] ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Instance of ex:Gender should only be ex:Male and ex:Female";
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "ex" ;
+                sh:namespace "http://example.org/ns#"^^xsd:anyURI ;
+            ]
+        ] ;
+        sh:select """
+            SELECT $this (COUNT(?gender) AS ?count)
+            WHERE {
+              ?gender a $this .
+            }
+            GROUP BY $this
+            HAVING (?count != 2)
+        """
+    ] .

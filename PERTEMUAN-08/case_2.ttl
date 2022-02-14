@@ -1,0 +1,116 @@
+# Case: Cantons of Switzerland
+
+# DATA GRAPH
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix ex: <http://example.org/ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dbr:Switzerland a dbo:Country .
+
+dbr:Cantons_of_Switzerland dbp:territory dbr:Switzerland .
+
+dbr:Appenzell_Innerrhoden a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Basel-Landschaft a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Bern a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Basel-Stadt a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Thurgau a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Ticino a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Nidwalden a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Aargau a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Vaud a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Valais a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Appenzell_Ausserrhoden a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Fribourg a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Geneva a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Obwalden a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Glarus a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Zürich a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Grisons a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Jura a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Lucerne a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Neuchâtel a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Schaffhausen a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Schwyz a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Solothurn a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_St_Gallen a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Uri a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+dbr:Canton_of_Zug a dbo:Location, dbo:Settlement ;
+  dbo:type dbr:Cantons_of_Switzerland .
+
+
+# SHAPE GRAPH
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+ex:SwitzerlandCantonsConstraint a sh:NodeShape ;
+  sh:targetNode dbr:Cantons_of_Switzerland ;
+  sh:property ex:NumOfCantonsProperty .
+
+ex:NumOfCantonsProperty a sh:PropertyShape ;
+  sh:path ( [ sh:inversePath dbp:territory ] [ sh:inversePath dbo:type ] ) ;
+  sh:minCount 26 ;
+  sh:maxCount 26 .
