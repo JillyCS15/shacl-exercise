@@ -1,0 +1,39 @@
+@prefix ex: <http://example.org/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Shape untuk mengecek jumlah anak dari instance Habibie
+ex:HabibieChildren a sh:NodeShape ;
+    sh:targetNode wd:Q76156 ;
+    sh:property [
+        sh:path wdt:P40 ;
+        sh:minCount 2 ;
+        sh:maxCount 2 ;
+        sh:message "The number of children for Habibie is 2." ;
+    ] .
+
+# Shape untuk mengecek jumlah anak dari instance Johnny G. Plate
+ex:JohnnyChildren a sh:NodeShape ;
+    sh:targetNode wd:Q72119052 ;
+    sh:property [
+        sh:path wdt:P40 ;
+        sh:minCount 3 ;
+        sh:maxCount 3 ;
+        sh:message "The number of children for Johnny G. Plate is 3." ;
+    ] .
+
+# Shape untuk mengecek jumlah anak dari instance Anies Baswedan
+ex:AniesChildren a sh:NodeShape ;
+    sh:targetNode wd:Q4263230 ;
+    sh:property [
+        sh:path wdt:P40 ;
+        sh:minCount 4 ;
+        sh:maxCount 4 ;
+        sh:message "The number of children for Anies Baswedan is 4." ;
+    ] .
